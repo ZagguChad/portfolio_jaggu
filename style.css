@@ -1559,7 +1559,7 @@ body {
   }
 }
 
-/* ═══════════════ LOADING SCREEN (d33pak.space inspired) ═══════════════ */
+/* ═══════════════ LOADING SCREEN (d33pak.space inspired - Cream Theme & Dissolve Fade) ═══════════════ */
 body.loader-active {
   overflow: hidden !important;
   height: 100vh;
@@ -1568,20 +1568,26 @@ body.loader-active {
 .loader-overlay {
   position: fixed;
   inset: 0;
-  z-index: 99999;
-  background-color: #141111;
-  color: #FFFAEF;
+  z-index: 999999;
+  background-color: var(--cream, #FFFAEF);
+  background-image: radial-gradient(color-mix(in srgb, #141111 12%, transparent) 2.5px, transparent 2.5px);
+  background-size: 30px 30px;
+  color: var(--ink, #141111);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  transition: transform 0.85s cubic-bezier(0.85, 0, 0.15, 1);
-  will-change: transform;
+  opacity: 1;
+  filter: blur(0px);
+  transition: opacity 0.75s cubic-bezier(0.4, 0, 0.2, 1), filter 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, filter;
 }
 
 .loader-overlay.loader-exit {
-  transform: translateY(-100%);
+  opacity: 0;
+  filter: blur(10px);
+  pointer-events: none;
 }
 
 .loader-content {
@@ -1605,11 +1611,11 @@ body.loader-active {
 }
 
 .loader-dot {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   background-color: var(--brutal-red, #F97264);
   border-radius: 50%;
-  box-shadow: 0 0 16px rgba(249, 114, 100, 0.8);
+  box-shadow: 0 0 16px rgba(249, 114, 100, 0.6);
   animation: loader-pulse 1.5s infinite ease-in-out;
 }
 
@@ -1624,7 +1630,7 @@ body.loader-active {
   font-weight: 700;
   letter-spacing: -0.03em;
   text-transform: uppercase;
-  color: #FFFFFF;
+  color: var(--ink, #141111);
   line-height: 1;
   margin: 0;
   user-select: none;
@@ -1656,16 +1662,17 @@ body.loader-active {
 
 .loader-progress-bar {
   width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.12);
+  height: 4px;
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
   border-radius: 4px;
   overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
 }
 
 .loader-progress-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--brutal-yellow) 0%, var(--brutal-red) 50%, var(--brutal-pink) 100%);
+  background: var(--ink, #141111);
   border-radius: 4px;
   transition: width 0.05s linear;
 }
@@ -1677,13 +1684,14 @@ body.loader-active {
   font-family: 'Space Mono', monospace;
   font-size: 0.85rem;
   letter-spacing: 0.1em;
-  color: rgba(255, 250, 239, 0.6);
+  color: color-mix(in srgb, var(--ink) 70%, transparent);
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 .loader-percent {
   font-weight: 700;
-  color: var(--brutal-yellow);
+  color: var(--brutal-red, #F97264);
 }
 
 /* REDUCED MOTION */
