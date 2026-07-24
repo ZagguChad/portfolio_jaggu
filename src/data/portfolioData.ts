@@ -291,10 +291,10 @@ export const WORK_PROJECTS: WorkProject[] = [
 ];
 
 export const CHECKLIST_ITEMS: ChecklistItem[] = [
-  { id: 1, text: 'hard problems with real-world impact' },
-  { id: 2, text: 'AI-shaped opportunities' },
-  { id: 3, text: 'teams that ship ambitious products' },
-  { id: 4, text: 'India, remote, or anywhere ambitious' }
+  { id: 1, text: 'Building things people actually use' },
+  { id: 2, text: 'AI that solves real problems' },
+  { id: 3, text: 'Shipping ideas instead of collecting them' },
+  { id: 4, text: 'Learning something new every week' }
 ];
 
 export const SOCIAL_LINKS = {

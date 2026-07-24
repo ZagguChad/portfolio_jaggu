@@ -71,7 +71,7 @@ export default function Loader() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -15 }}
                 transition={{ duration: 0.15 }}
-                className="font-grotesk text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight"
+                className="font-grotesk text-3xl xs:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-center px-2"
               >
                 {GREETINGS[currentIndex]}
               </motion.h1>

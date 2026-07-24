@@ -9,7 +9,7 @@ export default function Footer() {
         speedSec={112}
       />
 
-      <div className="w-full max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row justify-between items-center font-mono text-xs font-bold text-[#141111]/80 gap-4">
+      <div className="w-full max-w-6xl mx-auto px-4 py-6 sm:py-8 flex flex-col sm:flex-row justify-between items-center font-mono text-[11px] sm:text-xs font-bold text-[#141111]/80 gap-3 sm:gap-4 text-center sm:text-left">
         <span>© 2026 Zaggu</span>
         <span>K. Jagadish Sai Ram · Amrita Vishwa Vidyapeetham</span>
       </div>

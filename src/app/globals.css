@@ -15,19 +15,64 @@
     background-color: var(--bg-cream);
     color: var(--text-dark);
     font-family: 'Inter', sans-serif;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
   body {
     background-color: #FFFAEF;
     color: #141111;
+    max-width: 100vw;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
   }
+}
+
+/* Hide default browser scrollbar while preserving scrollability */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Texture overlay for dots pattern */
 .texture-dots {
   background-image: radial-gradient(#141111 0.75px, transparent 0.75px);
   background-size: 24px 24px;
+}
+
+/* Blueprint Grid Texture */
+.texture-blueprint {
+  background-image: 
+    linear-gradient(rgba(20, 17, 17, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 17, 17, 0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.texture-blueprint-dense {
+  background-image: 
+    linear-gradient(rgba(20, 17, 17, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 17, 17, 0.12) 1px, transparent 1px);
+  background-size: 12px 12px;
+}
+
+.texture-blueprint-dark {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* PCB Breadboard Circuit Texture */
+.texture-pcb {
+  background-color: #0b1a10;
+  background-image: 
+    radial-gradient(rgba(168, 230, 108, 0.25) 1.5px, transparent 1.5px),
+    linear-gradient(rgba(168, 230, 108, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(168, 230, 108, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px, 20px 20px, 20px 20px;
 }
 
 /* Custom Neo-Brutalist Border & Pin */
@@ -49,6 +94,35 @@
   box-shadow: 0 0 0 3px #FFFAEF, 0 0 0 5px #141111;
 }
 
+/* DYMO Embossed Label Styling */
+.dymo-label {
+  background-color: #141111;
+  color: #FFFAEF;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  box-shadow: 1px 2px 0px rgba(0,0,0,0.4);
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+/* Engineering Inspection Seal Stamp */
+.stamp-approved {
+  border: 3px dashed #FF6B8B;
+  color: #FF6B8B;
+  font-family: 'Space Mono', monospace;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 4px 10px;
+  border-radius: 6px;
+  transform: rotate(-12deg);
+  display: inline-block;
+  user-select: none;
+}
+
 /* Marquee Continuous Rolling Animation */
 @keyframes marquee {
   0% { transform: translateX(0%); }
@@ -62,11 +136,35 @@
 /* EQ Bar Animation */
 @keyframes eqPulse {
   0%, 100% { height: 4px; }
-  50% { height: 18px; }
+  50% { height: 22px; }
 }
 
 .animate-eq {
-  animation: eqPulse 0.8s ease-in-out infinite alternate;
+  animation: eqPulse 0.7s ease-in-out infinite alternate;
+}
+
+/* Cassette Tape Reel Rotation */
+@keyframes spinReel {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-reel-spin {
+  animation: spinReel 2.5s linear infinite;
+}
+
+/* VU Meter Needle Swing */
+@keyframes vuNeedleSwing {
+  0% { transform: rotate(-35deg); }
+  30% { transform: rotate(15deg); }
+  60% { transform: rotate(-10deg); }
+  80% { transform: rotate(25deg); }
+  100% { transform: rotate(-35deg); }
+}
+
+.animate-vu-needle {
+  animation: vuNeedleSwing 3.2s ease-in-out infinite;
+  transform-origin: bottom center;
 }
 
 /* Blink Cursor */
@@ -80,6 +178,16 @@
   margin-left: 2px;
   animation: blink 1s step-end infinite;
   color: #141111;
+}
+
+/* LED Status Indicator Pulse */
+@keyframes ledPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.9); }
+}
+
+.animate-led {
+  animation: ledPulse 1.2s ease-in-out infinite;
 }
 
 /* Decorative Micro-Animations (GPU Accelerated) */
@@ -133,4 +241,5 @@
   animation: decorDrift 8s ease-in-out infinite;
   will-change: transform;
 }
+
 

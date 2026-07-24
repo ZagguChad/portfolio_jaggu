@@ -25,6 +25,15 @@ import {
   SunflowerIcon,
   SmileIcon,
   DotPattern,
+  OrigamiCrane,
+  EngineeringRuler,
+  MicrochipIC,
+  AINodeGraph,
+  VUMeterIcon,
+  CassetteTapeIcon,
+  CoffeeMug,
+  PaperClip,
+  BinderHoles,
 } from './index';
 
 export default function ParallaxDecorLayer() {
@@ -43,42 +52,55 @@ export default function ParallaxDecorLayer() {
       targetPos.current.y = (e.clientY - centerY) / centerY;
     };
 
+    const handleOrientation = (e: DeviceOrientationEvent) => {
+      if (e.gamma !== null && e.beta !== null) {
+        // Normalized ratio calculations (-1.0 to 1.0)
+        const tiltX = Math.min(Math.max(e.gamma, -45), 45) / 45;
+        const normBeta = e.beta - 40; // centered at ~40deg comfortable viewing angle
+        const tiltY = Math.min(Math.max(normBeta, -40), 40) / 40;
+
+        targetPos.current.x = tiltX;
+        targetPos.current.y = tiltY;
+      }
+    };
+
     const handleScroll = () => {
       targetPos.current.scrollY = window.scrollY;
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('deviceorientation', handleOrientation, { passive: true });
     window.addEventListener('scroll', handleScroll, { passive: true });
     targetPos.current.scrollY = window.scrollY;
 
     let rafId: number;
 
     const animate = () => {
-      // Lerp for butter-smooth movement
-      currentPos.current.x += (targetPos.current.x - currentPos.current.x) * 0.05;
-      currentPos.current.y += (targetPos.current.y - currentPos.current.y) * 0.05;
+      // Lerp for butter-smooth motion ratio calculations
+      currentPos.current.x += (targetPos.current.x - currentPos.current.x) * 0.06;
+      currentPos.current.y += (targetPos.current.y - currentPos.current.y) * 0.06;
       currentPos.current.scrollY += (targetPos.current.scrollY - currentPos.current.scrollY) * 0.08;
 
       const { x, y, scrollY } = currentPos.current;
 
-      // Layer 1: Foreground - Highest movement factor
+      // Layer 1: Foreground - Highest movement ratio factor
       if (layer1Ref.current) {
-        const l1X = x * 35;
-        const l1Y = y * 35 - scrollY * 0.08;
+        const l1X = x * 28;
+        const l1Y = y * 28 - scrollY * 0.08;
         layer1Ref.current.style.transform = `translate3d(${l1X.toFixed(2)}px, ${l1Y.toFixed(2)}px, 0)`;
       }
 
-      // Layer 2: Middle - Moderate movement factor
+      // Layer 2: Middle - Moderate movement ratio factor
       if (layer2Ref.current) {
-        const l2X = x * 18;
-        const l2Y = y * 18 - scrollY * 0.04;
+        const l2X = x * 15;
+        const l2Y = y * 15 - scrollY * 0.04;
         layer2Ref.current.style.transform = `translate3d(${l2X.toFixed(2)}px, ${l2Y.toFixed(2)}px, 0)`;
       }
 
-      // Layer 3: Background - Lowest movement factor
+      // Layer 3: Background - Lowest movement ratio factor
       if (layer3Ref.current) {
-        const l3X = x * 8;
-        const l3Y = y * 8 - scrollY * 0.015;
+        const l3X = x * 7;
+        const l3Y = y * 7 - scrollY * 0.015;
         layer3Ref.current.style.transform = `translate3d(${l3X.toFixed(2)}px, ${l3Y.toFixed(2)}px, 0)`;
       }
 
@@ -89,6 +111,7 @@ export default function ParallaxDecorLayer() {
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('deviceorientation', handleOrientation);
       window.removeEventListener('scroll', handleScroll);
       cancelAnimationFrame(rafId);
     };
@@ -96,11 +119,19 @@ export default function ParallaxDecorLayer() {
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
-      {/* LAYER 3: Background (Circles, rings, dots, wavy lines, Batman, plant outline) */}
+      {/* Left Notebook Binder Holes */}
+      <div className="fixed top-24 left-2 z-10 hidden xl:block opacity-40">
+        <BinderHoles count={8} />
+      </div>
+
+      {/* LAYER 3: Background (Blueprint Grids, Coordinate marks, Origami, Circles, Dot Patterns) */}
       <div ref={layer3Ref} className="absolute inset-0 opacity-40">
-        {/* Top / Hero area background decor */}
+        {/* Top / Hero area background blueprint marks */}
+        <div className="absolute top-[5%] left-[2%] font-mono text-[10px] text-[#141111]/40 uppercase font-bold tracking-widest">
+          + GRID 01 // ORIGIN (0.00, 0.00)
+        </div>
         <div className="absolute top-[8%] left-[5%] animate-pulse-gentle">
-          <CircleShape size={44} color="#FFD000" strokeWidth={2} />
+          <OrigamiCrane size={44} color="#141111" strokeWidth={1.8} />
         </div>
         <div className="absolute top-[14%] right-[6%] animate-drift">
           <DashedRing size={52} color="#27CCF3" strokeWidth={2} />
@@ -110,6 +141,9 @@ export default function ParallaxDecorLayer() {
         </div>
 
         {/* Roles section background decor */}
+        <div className="absolute top-[34%] right-[3%] font-mono text-[9px] text-[#141111]/50 font-bold border-l-2 border-[#141111] pl-2">
+          DIMENSION: 120mm x 80mm
+        </div>
         <div className="absolute top-[38%] right-[8%] animate-spin-slow">
           <BatmanLogo size={48} color="#141111" strokeWidth={2} />
         </div>
@@ -121,8 +155,8 @@ export default function ParallaxDecorLayer() {
         </div>
 
         {/* Work section background decor */}
-        <div className="absolute top-[68%] left-[6%] animate-pulse-gentle">
-          <LocationPin size={34} color="#FFD000" strokeWidth={2} />
+        <div className="absolute top-[68%] left-[4%] animate-pulse-gentle">
+          <EngineeringRuler size={44} color="#141111" />
         </div>
         <div className="absolute top-[76%] right-[5%] opacity-30">
           <DotPattern size={56} color="#141111" />
@@ -130,21 +164,21 @@ export default function ParallaxDecorLayer() {
 
         {/* Connect section background decor */}
         <div className="absolute top-[88%] left-[8%] animate-float-slow">
-          <DashedRing size={40} color="#C0A0FF" strokeWidth={2} />
+          <VUMeterIcon size={44} color="#141111" />
         </div>
       </div>
 
-      {/* LAYER 2: Middle (Brackets, hashtags, clouds, code symbols, lightning, speech bubble, gear, sunflower) */}
+      {/* LAYER 2: Middle (Engineering Tools, Microchip ICs, AI Node Graph, Brackets, Gear) */}
       <div ref={layer2Ref} className="absolute inset-0 opacity-70">
         {/* Hero Area */}
         <div className="absolute top-[6%] right-[16%] animate-float-slow">
-          <Cloud size={44} color="#27CCF3" strokeWidth={2} />
+          <MicrochipIC size={42} label="AI-SYS" />
         </div>
         <div className="absolute top-[18%] left-[18%] animate-wiggle">
           <Bracket size={36} color="#FF6B8B" strokeWidth={2.5} />
         </div>
         <div className="absolute top-[28%] right-[22%] animate-pulse-gentle">
-          <Lightning size={32} color="#FFD000" fill="#FFD000" strokeWidth={1.5} />
+          <AINodeGraph size={46} color="#141111" />
         </div>
 
         {/* Roles Section */}
@@ -160,7 +194,7 @@ export default function ParallaxDecorLayer() {
 
         {/* Work Section */}
         <div className="absolute top-[64%] right-[20%] animate-wiggle">
-          <Hashtag size={34} color="#A8E66C" strokeWidth={2.5} />
+          <CassetteTapeIcon size={46} color="#141111" />
         </div>
         <div className="absolute top-[74%] left-[14%] animate-pulse-gentle">
           <AngleBracket size={36} color="#27CCF3" strokeWidth={2.5} />
@@ -168,11 +202,11 @@ export default function ParallaxDecorLayer() {
 
         {/* Connect Section */}
         <div className="absolute top-[86%] right-[14%] animate-float-slow">
-          <CodeIcon size={36} color="#FF6B8B" strokeWidth={2} />
+          <CoffeeMug size={40} color="#141111" />
         </div>
       </div>
 
-      {/* LAYER 1: Foreground (Paper plane, stars, sparkles, cursor, small arrows) */}
+      {/* LAYER 1: Foreground (Paper plane, stars, paper clips, sparkles, cursor, dimension arrows) */}
       <div ref={layer1Ref} className="absolute inset-0 opacity-90">
         {/* Hero Area */}
         <div className="absolute top-[10%] left-[24%] animate-float-slow">
@@ -182,7 +216,7 @@ export default function ParallaxDecorLayer() {
           <Sparkle size={26} color="#FF6B8B" fill="#FF6B8B" strokeWidth={1.5} />
         </div>
         <div className="absolute top-[24%] left-[30%] animate-wiggle">
-          <CursorIcon size={28} color="#141111" fill="#27CCF3" strokeWidth={2} />
+          <PaperClip size={32} color="#141111" />
         </div>
 
         {/* Roles Section */}

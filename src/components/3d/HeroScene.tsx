@@ -41,13 +41,14 @@ export default function HeroScene() {
 
     // Geometries
     const geometries: THREE.BufferGeometry[] = [
-      new THREE.OctahedronGeometry(0.8, 0),
-      new THREE.TorusGeometry(0.7, 0.15, 8, 16),
+      new THREE.OctahedronGeometry(0.85, 0),
+      new THREE.TorusGeometry(0.7, 0.15, 6, 12),
       new THREE.IcosahedronGeometry(0.75, 0),
       new THREE.BoxGeometry(0.9, 0.9, 0.9),
-      new THREE.CylinderGeometry(0.3, 0.3, 1.2, 8),
-      new THREE.RingGeometry(0.5, 0.7, 16),
-      new THREE.SphereGeometry(0.5, 8, 8),
+      new THREE.TetrahedronGeometry(0.85, 0),
+      new THREE.CylinderGeometry(0.3, 0.3, 1.2, 6),
+      new THREE.RingGeometry(0.5, 0.7, 8),
+      new THREE.DodecahedronGeometry(0.7, 0),
     ];
 
     const meshes: { mesh: THREE.Mesh; rotSpeed: { x: number; y: number; z: number }; basePosY: number; floatSpeed: number; floatOffset: number }[] = [];
@@ -60,6 +61,7 @@ export default function HeroScene() {
       { x: 0, y: 3.0, z: -3 },
       { x: -4.0, y: -0.5, z: -2.5 },
       { x: 4.2, y: 0.5, z: -1.8 },
+      { x: 1.8, y: -2.8, z: -2.0 },
     ];
 
     positions.forEach((pos, idx) => {
@@ -71,7 +73,8 @@ export default function HeroScene() {
         color: color,
         wireframe: isWire,
         wireframeLinewidth: isWire ? 2 : 1,
-        roughness: 0.3,
+        flatShading: true,
+        roughness: 0.4,
         metalness: 0.1,
       });
 
@@ -96,21 +99,21 @@ export default function HeroScene() {
       });
     });
 
-    // Floating particles (points)
+    // Floating engineering particles (points)
     const particleGeo = new THREE.BufferGeometry();
-    const particleCount = 40;
+    const particleCount = 60;
     const posArray = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount * 3; i += 3) {
-      posArray[i] = (Math.random() - 0.5) * 16;
-      posArray[i + 1] = (Math.random() - 0.5) * 10;
-      posArray[i + 2] = (Math.random() - 0.5) * 6;
+      posArray[i] = (Math.random() - 0.5) * 18;
+      posArray[i + 1] = (Math.random() - 0.5) * 12;
+      posArray[i + 2] = (Math.random() - 0.5) * 8;
     }
     particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     const particleMat = new THREE.PointsMaterial({
-      size: 0.08,
+      size: 0.09,
       color: 0x141111,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.45,
     });
     const particles = new THREE.Points(particleGeo, particleMat);
     group.add(particles);
