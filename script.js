@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 7. NAV ACTIVE STATE
   const initNavActiveState = () => {
     const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
     
     if (!sections.length || !navLinks.length) return;
 
@@ -389,98 +389,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }, {
-      rootMargin: '-30% 0px -40% 0px'
+      rootMargin: '-50% 0px -50% 0px'
     });
 
     sections.forEach(section => navObserver.observe(section));
-  };
-
-  // 8. THEME TOGGLE (Light / Dark Mode)
-  const initThemeToggle = () => {
-    const toggleBtn = document.getElementById('theme-toggle');
-    if (!toggleBtn) return;
-
-    const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
-
-    if (initialTheme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
-
-    toggleBtn.addEventListener('click', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      if (currentTheme === 'dark') {
-        document.documentElement.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
-      } else {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-      }
-    });
-  };
-
-  // 9. COMMAND PALETTE (⌘K)
-  const initCmdPalette = () => {
-    const palette = document.getElementById('cmd-palette');
-    const input = document.getElementById('cmd-input');
-    const backdrop = document.getElementById('cmd-backdrop');
-    const btn = document.getElementById('cmd-k-btn');
-    const items = document.querySelectorAll('.cmd-item');
-
-    if (!palette || !input) return;
-
-    const openPalette = () => {
-      palette.classList.add('open');
-      palette.setAttribute('aria-hidden', 'false');
-      input.value = '';
-      filterItems('');
-      setTimeout(() => input.focus(), 50);
-    };
-
-    const closePalette = () => {
-      palette.classList.remove('open');
-      palette.setAttribute('aria-hidden', 'true');
-    };
-
-    const filterItems = (query) => {
-      const q = query.toLowerCase().trim();
-      items.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        const cmd = item.getAttribute('data-cmd') || '';
-        if (!q || text.includes(q) || cmd.includes(q)) {
-          item.style.display = 'flex';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    };
-
-    if (btn) btn.addEventListener('click', openPalette);
-    if (backdrop) backdrop.addEventListener('click', closePalette);
-
-    input.addEventListener('input', (e) => filterItems(e.target.value));
-
-    items.forEach(item => {
-      item.addEventListener('click', () => {
-        closePalette();
-      });
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        if (palette.classList.contains('open')) {
-          closePalette();
-        } else {
-          openPalette();
-        }
-      } else if (e.key === 'Escape' && palette.classList.contains('open')) {
-        closePalette();
-      }
-    });
   };
 
   // INITIALIZE ALL
@@ -493,8 +405,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initProjectHover();
     initMarquee();
     initNavActiveState();
-    initThemeToggle();
-    initCmdPalette();
   };
 
   if (document.readyState === 'loading') {
