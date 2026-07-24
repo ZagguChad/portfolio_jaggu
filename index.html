@@ -8,9 +8,28 @@
   <meta property="og:title" content="Zaggu — AI Engineer & Creative Technologist" />
   <meta property="og:description" content="Building intelligent products that solve real-world problems through AI, automation, and thoughtful engineering." />
   <meta property="og:type" content="website" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=2" />
+  <style>
+    /* Critical Loader CSS for Instant Display */
+    body.loader-active { overflow: hidden !important; height: 100vh; }
+    .loader-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background-color: #141111;
+      color: #FFFAEF;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      overflow: hidden;
+      transition: transform 0.85s cubic-bezier(0.85, 0, 0.15, 1);
+      will-change: transform;
+    }
+    .loader-overlay.loader-exit { transform: translateY(-100%); }
+  </style>
 </head>
-<body>
+<body class="loader-active">
 
   <!-- ═══════════════ LOADING SCREEN (Inspired by d33pak.space) ═══════════════ -->
   <div id="loader" class="loader-overlay" aria-hidden="false">
@@ -709,6 +728,6 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=2"></script>
 </body>
 </html>

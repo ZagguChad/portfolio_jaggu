@@ -396,13 +396,20 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // INITIALIZE ALL
-  initLoader();
-  initSmoothScroll();
-  initRevealAnimations();
-  initRadioTuner();
-  initChecklist();
-  initProjectHover();
-  initMarquee();
-  initNavActiveState();
+  const initApp = () => {
+    initLoader();
+    initSmoothScroll();
+    initRevealAnimations();
+    initRadioTuner();
+    initChecklist();
+    initProjectHover();
+    initMarquee();
+    initNavActiveState();
+  };
 
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
 });
