@@ -50,6 +50,16 @@ export default function RolesRadio() {
           <span className="absolute bottom-4 left-4 w-3 h-3 rounded-full bg-[#141111]" />
           <span className="absolute bottom-4 right-4 w-3 h-3 rounded-full bg-[#141111]" />
 
+          {/* Section 02 Heading */}
+          <div className="flex items-center gap-3 mb-8 border-b-2 border-[#141111] pb-3">
+            <span className="px-3 py-1 bg-[#141111] text-[#FFFAEF] brutal-border-sm font-mono text-xs font-extrabold uppercase tracking-wider">
+              SECTION // 02
+            </span>
+            <h2 className="font-grotesk text-xs md:text-sm font-bold text-[#141111]/80 uppercase tracking-widest">
+              Roles & Experience
+            </h2>
+          </div>
+
           {/* Radio Top Header */}
           <div className="flex justify-between items-center pb-6 border-b-2 border-[#141111] mb-8">
             <span className="px-3 py-1 bg-[#FFD000] brutal-border-sm font-mono text-xs font-extrabold uppercase">

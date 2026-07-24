@@ -28,6 +28,16 @@ export default function ConnectChecklist() {
           transition={{ duration: 0.5 }}
           className="bg-[#FFFAEF] brutal-border rounded-3xl p-6 md:p-10 shadow-brutal-xl"
         >
+          {/* Section 04 Heading */}
+          <div className="flex items-center gap-3 mb-8 border-b-2 border-[#141111] pb-3">
+            <span className="px-3 py-1 bg-[#141111] text-[#FFFAEF] brutal-border-sm font-mono text-xs font-extrabold uppercase tracking-wider">
+              SECTION // 04
+            </span>
+            <h2 className="font-grotesk text-xs md:text-sm font-bold text-[#141111]/80 uppercase tracking-widest">
+              Let's Connect & Collaborate
+            </h2>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Column: Checklist */}
             <div className="lg:col-span-7">

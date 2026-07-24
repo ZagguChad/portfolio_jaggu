@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import MarqueeBanner from '@/components/ui/MarqueeBanner';
+import ProjectModal from '@/components/ui/ProjectModal';
 import { WORK_PROJECTS } from '@/data/portfolioData';
 import { WorkProject } from '@/types/portfolio';
 
@@ -16,14 +17,49 @@ const accentClasses: Record<WorkProject['accentColor'], string> = {
 
 export default function WorkGrid() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<WorkProject | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAllWorkMode, setIsAllWorkMode] = useState(false);
+
+  // Featured subset to display directly on the page (first 4 or marked as featured)
+  const featuredProjects = WORK_PROJECTS.filter((p) => p.featured);
+
+  const handleOpenProject = (project: WorkProject) => {
+    setSelectedProject(project);
+    setIsAllWorkMode(false);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenAllWork = () => {
+    setSelectedProject(null);
+    setIsAllWorkMode(true);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
+    setIsAllWorkMode(false);
+  };
 
   return (
     <section id="work" className="relative py-16">
       <MarqueeBanner text="selected work ✦ selected work ✦ selected work ✦ selected work ✦" colorClass="bg-[#FFD000]" />
 
       <div className="w-full max-w-6xl mx-auto px-4 mt-12">
+        {/* Section 03 Heading */}
+        <div className="flex items-center gap-3 mb-8 border-b-2 border-[#141111] pb-3">
+          <span className="px-3 py-1 bg-[#141111] text-[#FFFAEF] brutal-border-sm font-mono text-xs font-extrabold uppercase tracking-wider">
+            SECTION // 03
+          </span>
+          <h2 className="font-grotesk text-xs md:text-sm font-bold text-[#141111]/80 uppercase tracking-widest">
+            Selected Work & Featured Projects
+          </h2>
+        </div>
+
+        {/* Featured Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {WORK_PROJECTS.map((project, index) => {
+          {featuredProjects.map((project, index) => {
             const isHovered = hoveredId === project.id;
 
             return (
@@ -38,7 +74,8 @@ export default function WorkGrid() {
                 <div
                   onMouseEnter={() => setHoveredId(project.id)}
                   onMouseLeave={() => setHoveredId(null)}
-                  className="bg-[#FFFAEF] brutal-border rounded-2xl p-5 shadow-brutal hover:shadow-brutal-xl transition-all duration-200 group cursor-default relative"
+                  onClick={() => handleOpenProject(project)}
+                  className="bg-[#FFFAEF] brutal-border rounded-2xl p-5 shadow-brutal hover:shadow-brutal-xl transition-all duration-200 group cursor-pointer relative"
                 >
                   {/* Titlebar */}
                   <div className="flex items-center justify-between border-b-2 border-[#141111] pb-3 mb-4">
@@ -51,20 +88,15 @@ export default function WorkGrid() {
                       </span>
                     </div>
 
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="font-mono text-xs font-bold text-[#141111] hover:text-[#27CCF3] transition-colors flex items-center gap-1"
-                    >
-                      github ↗
-                    </a>
+                    <span className="px-2 py-0.5 bg-[#FFD000] brutal-border-sm font-mono text-[10px] font-bold uppercase">
+                      Inspect ↗
+                    </span>
                   </div>
 
                   {/* Body preview area */}
                   <div className="bg-[#141111] text-[#FFFAEF] brutal-border rounded-xl p-4 min-h-[170px] flex flex-col justify-between mb-4 relative overflow-hidden">
                     <span className="absolute top-2 right-3 font-mono text-[10px] text-white/40 uppercase font-bold">
-                      ▶ hover to run
+                      ▶ click for details
                     </span>
 
                     {/* Prompt Header */}
@@ -109,14 +141,28 @@ export default function WorkGrid() {
                     <div className={`h-1.5 w-full rounded-full mt-4 ${accentClasses[project.accentColor]}`} />
                   </div>
 
-                  {/* Card Info Footer */}
+                  {/* Card Info Footer with Brief & Tech Stack */}
                   <div>
-                    <h3 className="font-grotesk font-extrabold text-lg text-[#141111] uppercase tracking-wide">
+                    <h3 className="font-grotesk font-extrabold text-lg text-[#141111] uppercase tracking-wide group-hover:text-[#27CCF3] transition-colors">
                       {project.title}
                     </h3>
-                    <p className="font-mono text-xs text-[#141111]/70 font-semibold mt-0.5">
-                      {project.subtitle}
+                    <p className="font-sans text-xs text-[#141111]/80 font-medium mt-1 leading-snug">
+                      {project.summary}
                     </p>
+
+                    {/* Tech Badges */}
+                    {project.techStack && (
+                      <div className="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-neutral-200">
+                        {project.techStack.map((tech, idx) => (
+                          <span
+                            key={idx}
+                            className="px-2 py-0.5 bg-[#FFFAEF] brutal-border-sm text-[10px] font-mono font-bold text-[#141111]"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -124,18 +170,32 @@ export default function WorkGrid() {
           })}
         </div>
 
-        {/* See All Work CTA */}
-        <div className="mt-12 text-center">
-          <a
-            href="https://github.com/ZagguChad?tab=repositories"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-block px-8 py-3.5 bg-[#FFD000] brutal-border rounded-full font-mono text-sm font-extrabold uppercase shadow-brutal hover:shadow-brutal-xl hover:-translate-y-0.5 transition-all"
+        {/* See All Work CTA Button */}
+        <div className="mt-12 text-center flex flex-col items-center gap-3">
+          <button
+            onClick={handleOpenAllWork}
+            className="px-8 py-3.5 bg-[#FFD000] brutal-border rounded-full font-mono text-sm font-extrabold uppercase shadow-brutal hover:shadow-brutal-xl hover:-translate-y-0.5 transition-all cursor-pointer"
           >
-            see all work ↗
-          </a>
+            see all work (10+ repositories) ↗
+          </button>
+          <span className="font-mono text-xs text-[#141111]/60 font-semibold">
+            Opens complete project catalog & GitHub repositories
+          </span>
         </div>
       </div>
+
+      {/* Pop-up Project Modal */}
+      <ProjectModal
+        project={selectedProject}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        allProjects={WORK_PROJECTS}
+        isAllWorkMode={isAllWorkMode}
+        onSelectProject={(proj) => {
+          setSelectedProject(proj);
+          setIsAllWorkMode(false);
+        }}
+      />
     </section>
   );
 }

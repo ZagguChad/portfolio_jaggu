@@ -8,6 +8,7 @@ import WorkGrid from '@/components/sections/WorkGrid';
 import ConnectChecklist from '@/components/sections/ConnectChecklist';
 import Footer from '@/components/layout/Footer';
 import ParallaxDecorLayer from '@/components/decor/ParallaxDecorLayer';
+import BatmanEasterEgg from '@/components/ui/BatmanEasterEgg';
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <WorkGrid />
       <ConnectChecklist />
       <Footer />
+      <BatmanEasterEgg />
     </main>
   );
 }

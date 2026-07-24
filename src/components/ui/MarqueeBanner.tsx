@@ -11,7 +11,7 @@ interface MarqueeBannerProps {
 export default function MarqueeBanner({
   text,
   colorClass = 'bg-[#27CCF3]',
-  speedSec = 88,
+  speedSec = 22,
 }: MarqueeBannerProps) {
   const [isPaused, setIsPaused] = useState(false);
 
@@ -24,7 +24,10 @@ export default function MarqueeBanner({
       <div
         className="flex w-max whitespace-nowrap"
         style={{
-          animation: `marquee ${speedSec}s linear infinite`,
+          animationName: 'marquee',
+          animationDuration: `${speedSec}s`,
+          animationTimingFunction: 'linear',
+          animationIterationCount: 'infinite',
           animationPlayState: isPaused ? 'paused' : 'running',
         }}
       >

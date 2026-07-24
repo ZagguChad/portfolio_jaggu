@@ -16,6 +16,10 @@ export interface WorkProject {
   filename: string;
   title: string;
   subtitle: string;
+  summary: string;
+  fullDescription?: string;
+  techStack?: string[];
+  featured?: boolean;
   githubUrl: string;
   accentColor: 'lime' | 'cyan' | 'pink' | 'lavender' | 'yellow';
   promptType: 'terminal' | 'gesture' | 'chat' | 'data';
