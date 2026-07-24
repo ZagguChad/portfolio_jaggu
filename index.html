@@ -8,9 +8,9 @@
   <meta property="og:title" content="Zaggu — AI Engineer & Creative Technologist" />
   <meta property="og:description" content="Building intelligent products that solve real-world problems through AI, automation, and thoughtful engineering." />
   <meta property="og:type" content="website" />
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=4" />
   <style>
-    /* Critical Loader CSS - Dissolve Fade & Cream Palette */
+    /* Critical Loader CSS - Parallax Curtain Reveal */
     body.loader-active { overflow: hidden !important; height: 100vh; }
     .loader-overlay {
       position: fixed;
@@ -23,14 +23,12 @@
       justify-content: space-between;
       align-items: center;
       overflow: hidden;
-      opacity: 1;
-      filter: blur(0px);
-      transition: opacity 0.75s ease-in-out, filter 0.75s ease-in-out;
-      will-change: opacity, filter;
+      transform: translateY(0);
+      transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+      will-change: transform;
     }
     .loader-overlay.loader-exit {
-      opacity: 0;
-      filter: blur(8px);
+      transform: translateY(-100%);
       pointer-events: none;
     }
   </style>
@@ -734,6 +732,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=3"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
