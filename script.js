@@ -1,5 +1,72 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+  // 0. LOADER CONTROLLER (Inspired by d33pak.space)
+  const initLoader = () => {
+    const loader = document.getElementById('loader');
+    const wordEl = document.getElementById('loader-word');
+    const percentEl = document.getElementById('loader-percent');
+    const progressFill = document.getElementById('loader-progress-fill');
+
+    if (!loader || !wordEl) return;
+
+    const greetings = [
+      "Hello",
+      "Bonjour",
+      "Hola",
+      "Ciao",
+      "नमस्ते",
+      "こんにちは",
+      "안녕하세요",
+      "你好",
+      "Olá",
+      "Привет",
+      "Hallo",
+      "مرحبًا",
+      "ZAGGU"
+    ];
+
+    document.body.classList.add('loader-active');
+
+    let currentIndex = 0;
+    const totalWords = greetings.length;
+    const intervalTime = 160; // ms per word transition
+    const totalDuration = totalWords * intervalTime;
+    const startTime = Date.now();
+
+    // Greeting word cycling
+    const wordInterval = setInterval(() => {
+      currentIndex++;
+      if (currentIndex < totalWords) {
+        wordEl.classList.remove('word-animate');
+        void wordEl.offsetWidth; // trigger reflow for smooth re-animation
+        wordEl.textContent = greetings[currentIndex];
+        wordEl.classList.add('word-animate');
+      } else {
+        clearInterval(wordInterval);
+      }
+    }, intervalTime);
+
+    // Percentage counter and progress bar update
+    const progressInterval = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(Math.floor((elapsed / totalDuration) * 100), 100);
+
+      if (percentEl) percentEl.textContent = `${progress}%`;
+      if (progressFill) progressFill.style.width = `${progress}%`;
+
+      if (progress >= 100) {
+        clearInterval(progressInterval);
+        setTimeout(() => {
+          loader.classList.add('loader-exit');
+          document.body.classList.remove('loader-active');
+          setTimeout(() => {
+            loader.style.display = 'none';
+          }, 850);
+        }, 250);
+      }
+    }, 25);
+  };
+
   // 1. SMOOTH SCROLL
   const initSmoothScroll = () => {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -329,6 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // INITIALIZE ALL
+  initLoader();
   initSmoothScroll();
   initRevealAnimations();
   initRadioTuner();
