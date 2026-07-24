@@ -1,0 +1,175 @@
+'use client';
+
+import dynamic from 'next/dynamic';
+import { motion } from 'framer-motion';
+import { SOCIAL_LINKS } from '@/data/portfolioData';
+
+const HeroScene = dynamic(() => import('@/components/3d/HeroScene'), {
+  ssr: false,
+});
+
+
+export default function Hero() {
+  return (
+    <section id="top" className="relative min-h-screen pt-28 pb-16 px-4 texture-dots flex items-center justify-center overflow-hidden">
+      {/* 3D R3F Ambient Scene */}
+      <HeroScene />
+
+      <div className="relative z-10 w-full max-w-5xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-[#FFFAEF] brutal-border rounded-3xl p-6 md:p-10 shadow-brutal-xl relative"
+        >
+          {/* Top corner dots */}
+          <span className="absolute top-4 left-4 w-3 h-3 rounded-full bg-[#141111]" />
+          <span className="absolute top-4 right-4 w-3 h-3 rounded-full bg-[#141111]" />
+          <span className="absolute bottom-4 left-4 w-3 h-3 rounded-full bg-[#141111]" />
+          <span className="absolute bottom-4 right-4 w-3 h-3 rounded-full bg-[#141111]" />
+
+          {/* Main Hero Header */}
+          <div className="flex flex-col lg:flex-row items-center gap-8 md:gap-12 mb-12">
+            {/* Avatar Polaroid Frame */}
+            <motion.div
+              whileHover={{ rotate: 3, scale: 1.03 }}
+              className="relative shrink-0"
+            >
+              <span className="pin-marker -top-3 left-1/2 -translate-x-1/2 z-20" />
+              <div className="bg-white brutal-border p-4 shadow-brutal rounded-2xl rotate-[-2deg]">
+                <div className="w-40 h-40 md:w-48 md:h-48 overflow-hidden rounded-xl brutal-border bg-neutral-200">
+                  <img
+                    src="assets/avatar.jpg"
+                    alt="Zaggu — Jagadish Sai Ram"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback placeholder if asset image missing
+                      e.currentTarget.src = 'https://api.dicebear.com/7.x/bottts/svg?seed=Zaggu';
+                    }}
+                  />
+                </div>
+                <div className="mt-3 text-center font-mono text-xs font-bold uppercase tracking-wider text-[#141111]">
+                  ZAGGU '26
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Info Column */}
+            <div className="flex-1 text-center lg:text-left">
+              <span className="inline-block px-3 py-1 bg-[#A8E66C] brutal-border-sm text-xs font-mono font-bold tracking-wider uppercase mb-3 shadow-brutal-sm">
+                ✷ builder pass — 2026
+              </span>
+              <h1 className="font-grotesk text-5xl md:text-7xl font-extrabold tracking-tight text-[#141111] mb-4">
+                ZAGGU
+              </h1>
+              <p className="font-sans text-lg md:text-xl font-medium leading-relaxed text-[#141111]/90 mb-4 max-w-2xl">
+                Building intelligent products that solve real-world problems through AI, automation, and thoughtful engineering.
+              </p>
+              <p className="font-mono text-xs md:text-sm text-[#141111]/70 font-semibold">
+                Vijayawada, India · UTC+5:30 · projects shipped: 10+
+              </p>
+            </div>
+          </div>
+
+          {/* Proof of Work Sticker Board */}
+          <div className="bg-[#141111]/5 brutal-border rounded-2xl p-6 relative">
+            <span className="absolute -top-3 left-6 px-3 py-0.5 bg-[#FFD000] brutal-border-sm font-mono text-xs font-bold uppercase tracking-wider">
+              proof of work & stickers
+            </span>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 pt-4">
+              {/* 1. Resume PDF */}
+              <motion.a
+                href={SOCIAL_LINKS.resumePdf}
+                download="Zaggu_Resume.pdf"
+                whileHover={{ scale: 1.08, rotate: -4 }}
+                className="bg-white brutal-border p-3 shadow-brutal-sm rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-[#FFD000] transition-colors group cursor-pointer"
+              >
+                <span className="font-mono text-xs font-bold text-[#141111] uppercase">Resume</span>
+                <span className="px-2 py-0.5 bg-[#141111] text-[#FFFAEF] font-mono text-[10px] font-bold rounded">
+                  PDF ↓
+                </span>
+              </motion.a>
+
+              {/* 2. GitHub */}
+              <motion.a
+                href={SOCIAL_LINKS.github}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.08, rotate: 5 }}
+                className="bg-[#27CCF3] brutal-border p-3 shadow-brutal-sm rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-white transition-colors cursor-pointer"
+              >
+                <svg viewBox="0 0 24 24" className="w-8 h-8 fill-current">
+                  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                </svg>
+                <span className="font-mono text-[10px] font-bold">GitHub</span>
+              </motion.a>
+
+              {/* 3. Amrita Shield */}
+              <motion.div
+                whileHover={{ scale: 1.08, rotate: -3 }}
+                className="bg-white brutal-border p-2 shadow-brutal-sm rounded-xl flex flex-col items-center justify-center text-center"
+              >
+                <span className="font-grotesk font-extrabold text-xs">AMRITA</span>
+                <span className="font-mono text-[9px] font-bold text-[#141111]/80">B.TECH CSE</span>
+                <span className="font-mono text-[8px] text-[#141111]/60">2027</span>
+              </motion.div>
+
+              {/* 4. MLSA Badge */}
+              <motion.div
+                whileHover={{ scale: 1.08, rotate: 4 }}
+                className="bg-[#27CCF3] brutal-border p-2 shadow-brutal-sm rounded-xl flex flex-col items-center justify-center text-center"
+              >
+                <span className="font-grotesk font-bold text-[10px] text-white">MICROSOFT</span>
+                <span className="font-grotesk font-bold text-[10px] text-white">LEARN SA</span>
+                <span className="mt-1 px-1 bg-[#FFFAEF] brutal-border-sm font-mono text-[8px] font-bold">HEAD EXEC</span>
+              </motion.div>
+
+              {/* 5. LinkedIn */}
+              <motion.a
+                href={SOCIAL_LINKS.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.08, rotate: -5 }}
+                className="bg-[#C0A0FF] brutal-border p-3 shadow-brutal-sm rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-white transition-colors cursor-pointer"
+              >
+                <svg viewBox="0 0 24 24" className="w-7 h-7 fill-current">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                <span className="font-mono text-[10px] font-bold">LinkedIn</span>
+              </motion.a>
+
+              {/* 6. Twitter / X */}
+              <motion.a
+                href={SOCIAL_LINKS.x}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.08, rotate: 3 }}
+                className="bg-[#FF6B8B] brutal-border p-3 shadow-brutal-sm rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-white transition-colors cursor-pointer"
+              >
+                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                <span className="font-mono text-[10px] font-bold">X.com</span>
+              </motion.a>
+
+              {/* 7. Instagram */}
+              <motion.a
+                href={SOCIAL_LINKS.instagram}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.08, rotate: -4 }}
+                className="bg-[#A8E66C] brutal-border p-3 shadow-brutal-sm rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-white transition-colors cursor-pointer"
+              >
+                <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                </svg>
+                <span className="font-mono text-[10px] font-bold">Instagram</span>
+              </motion.a>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
