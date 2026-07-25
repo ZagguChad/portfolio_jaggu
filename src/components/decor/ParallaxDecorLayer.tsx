@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { useNightShift } from '@/context/NightShiftContext';
 import {
   BatmanLogo,
   Star,
@@ -40,6 +41,7 @@ export default function ParallaxDecorLayer() {
   const layer1Ref = useRef<HTMLDivElement>(null);
   const layer2Ref = useRef<HTMLDivElement>(null);
   const layer3Ref = useRef<HTMLDivElement>(null);
+  const { isNightMode } = useNightShift();
 
   const targetPos = useRef({ x: 0, y: 0, scrollY: 0 });
   const currentPos = useRef({ x: 0, y: 0, scrollY: 0 });
@@ -76,31 +78,31 @@ export default function ParallaxDecorLayer() {
     let rafId: number;
 
     const animate = () => {
-      // Lerp for butter-smooth motion ratio calculations
-      currentPos.current.x += (targetPos.current.x - currentPos.current.x) * 0.06;
-      currentPos.current.y += (targetPos.current.y - currentPos.current.y) * 0.06;
-      currentPos.current.scrollY += (targetPos.current.scrollY - currentPos.current.scrollY) * 0.08;
+      // Butter-smooth fluid lerp ratios
+      currentPos.current.x += (targetPos.current.x - currentPos.current.x) * 0.05;
+      currentPos.current.y += (targetPos.current.y - currentPos.current.y) * 0.05;
+      currentPos.current.scrollY += (targetPos.current.scrollY - currentPos.current.scrollY) * 0.07;
 
       const { x, y, scrollY } = currentPos.current;
 
       // Layer 1: Foreground - Highest movement ratio factor
       if (layer1Ref.current) {
-        const l1X = x * 28;
-        const l1Y = y * 28 - scrollY * 0.08;
+        const l1X = x * 26;
+        const l1Y = y * 26 - scrollY * 0.07;
         layer1Ref.current.style.transform = `translate3d(${l1X.toFixed(2)}px, ${l1Y.toFixed(2)}px, 0)`;
       }
 
       // Layer 2: Middle - Moderate movement ratio factor
       if (layer2Ref.current) {
-        const l2X = x * 15;
-        const l2Y = y * 15 - scrollY * 0.04;
+        const l2X = x * 14;
+        const l2Y = y * 14 - scrollY * 0.035;
         layer2Ref.current.style.transform = `translate3d(${l2X.toFixed(2)}px, ${l2Y.toFixed(2)}px, 0)`;
       }
 
       // Layer 3: Background - Lowest movement ratio factor
       if (layer3Ref.current) {
-        const l3X = x * 7;
-        const l3Y = y * 7 - scrollY * 0.015;
+        const l3X = x * 6;
+        const l3Y = y * 6 - scrollY * 0.012;
         layer3Ref.current.style.transform = `translate3d(${l3X.toFixed(2)}px, ${l3Y.toFixed(2)}px, 0)`;
       }
 
@@ -118,7 +120,7 @@ export default function ParallaxDecorLayer() {
   }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 select-none">
+    <div className={`absolute inset-0 pointer-events-none overflow-hidden z-0 select-none transition-opacity duration-700 ${isNightMode ? 'opacity-0' : ''}`}>
       {/* Left Notebook Binder Holes */}
       <div className="fixed top-24 left-2 z-10 hidden xl:block opacity-40">
         <BinderHoles count={8} />

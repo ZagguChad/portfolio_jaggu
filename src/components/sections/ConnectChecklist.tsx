@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import MarqueeBanner from '@/components/ui/MarqueeBanner';
 import { CHECKLIST_ITEMS, SOCIAL_LINKS } from '@/data/portfolioData';
 import { CoffeeMug, PaperClip } from '@/components/decor';
+import { useNightShift } from '@/context/NightShiftContext';
 
 interface StickyNoteItem {
   tag: string;
@@ -45,6 +46,7 @@ const COUNTER_MESSAGES: Record<number, { text: string; subtext?: string }> = {
 export default function ConnectChecklist() {
   const [checkedIds, setCheckedIds] = useState<number[]>([]);
   const [activeNote, setActiveNote] = useState<StickyNoteItem>(STICKY_NOTES[0]);
+  const { isNightMode, playFx } = useNightShift();
 
   // Pick a random sticky note on page load
   useEffect(() => {
@@ -53,6 +55,7 @@ export default function ConnectChecklist() {
   }, []);
 
   const toggleCheck = (id: number) => {
+    playFx('toggle');
     setCheckedIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
@@ -63,7 +66,14 @@ export default function ConnectChecklist() {
 
   return (
     <section id="connect" className="relative py-16 texture-blueprint">
-      <MarqueeBanner text="build together ✦ let's connect ✦ build together ✦ let's connect ✦" colorClass="bg-[#FF6B8B]" />
+      <MarqueeBanner
+        text={
+          isNightMode
+            ? "TACTICAL MISSION COMMS ✦ SECURE CHANNELS OPEN ✦ BUILD TOGETHER ✦"
+            : "build together ✦ let's connect ✦ build together ✦ let's connect ✦"
+        }
+        colorClass={isNightMode ? "bg-[#D85B5B] text-white" : "bg-[#FF6B8B]"}
+      />
 
       <div className="w-full max-w-5xl mx-auto px-4 mt-12">
         <motion.div
@@ -71,24 +81,42 @@ export default function ConnectChecklist() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="bg-[#FFFAEF] brutal-border rounded-2xl sm:rounded-3xl p-4 xs:p-6 md:p-10 shadow-brutal-xl relative overflow-hidden"
+          className={`brutal-border rounded-2xl sm:rounded-3xl p-4 xs:p-6 md:p-10 shadow-brutal-xl relative overflow-hidden transition-colors ${
+            isNightMode
+              ? 'bg-[#17181B] text-[#ECECEC] border-[#3A3A3A]'
+              : 'bg-[#FFFAEF] text-[#141111] border-[#141111]'
+          }`}
         >
           {/* Paperclip top right */}
           <div className="absolute top-3 xs:top-4 right-4 xs:right-8 z-20 pointer-events-none hidden xs:block">
-            <PaperClip size={40} color="#141111" />
+            {isNightMode ? (
+              <div className="w-8 h-10 border-2 border-[#C8A94D] rounded-t-lg bg-[#202226] flex items-center justify-center font-mono text-[8px] font-bold text-[#C8A94D]">
+                CLIP
+              </div>
+            ) : (
+              <PaperClip size={40} color="#141111" />
+            )}
           </div>
 
           {/* Section 04 Heading */}
-          <div className="flex flex-wrap items-center justify-between gap-2.5 mb-6 xs:mb-8 border-b-2 border-[#141111] pb-3">
+          <div className={`flex flex-wrap items-center justify-between gap-2.5 mb-6 xs:mb-8 border-b-2 pb-3 ${
+            isNightMode ? 'border-[#3A3A3A]' : 'border-[#141111]'
+          }`}>
             <div className="flex items-center gap-2.5 xs:gap-3">
-              <span className="px-2.5 xs:px-3 py-1 bg-[#141111] text-[#FFFAEF] brutal-border-sm font-mono text-[10px] xs:text-xs font-extrabold uppercase tracking-wider">
+              <span className={`px-2.5 xs:px-3 py-1 brutal-border-sm font-mono text-[10px] xs:text-xs font-extrabold uppercase tracking-wider ${
+                isNightMode ? 'bg-[#C8A94D] text-[#0F1012] border-[#3A3A3A]' : 'bg-[#141111] text-[#FFFAEF]'
+              }`}>
                 SECTION // 04
               </span>
-              <h2 className="font-grotesk text-[11px] xs:text-xs md:text-sm font-bold text-[#141111]/80 uppercase tracking-widest">
-                BUILD TOGETHER
+              <h2 className={`font-grotesk text-[11px] xs:text-xs md:text-sm font-bold uppercase tracking-widest ${
+                isNightMode ? 'text-[#9A9A9A]' : 'text-[#141111]/80'
+              }`}>
+                {isNightMode ? 'TACTICAL COMMS & MISSION CONNECT' : 'BUILD TOGETHER'}
               </h2>
             </div>
-            <div className="flex items-center gap-2 font-mono text-[9px] xs:text-[10px] text-[#141111]/60 font-bold uppercase">
+            <div className={`flex items-center gap-2 font-mono text-[9px] xs:text-[10px] font-bold uppercase ${
+              isNightMode ? 'text-[#9A9A9A]' : 'text-[#141111]/60'
+            }`}>
               <span>REVISION 4.2</span>
               <span>•</span>
               <span>COFFEE LEVEL: STABLE ☕</span>
@@ -100,16 +128,22 @@ export default function ConnectChecklist() {
             <div className="lg:col-span-7 flex flex-col justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-2.5 xs:mb-3">
-                  <span className="inline-block px-2.5 xs:px-3 py-1 bg-[#FF6B8B] text-white brutal-border-sm font-mono text-[10px] xs:text-xs font-bold uppercase shadow-brutal-sm">
+                  <span className={`inline-block px-2.5 xs:px-3 py-1 brutal-border-sm font-mono text-[10px] xs:text-xs font-bold uppercase shadow-brutal-sm ${
+                    isNightMode ? 'bg-[#D85B5B] text-white border-[#3A3A3A]' : 'bg-[#FF6B8B] text-white'
+                  }`}>
                     CHECKLIST
                   </span>
-                  <CoffeeMug size={26} color="#141111" />
+                  <CoffeeMug size={26} color={isNightMode ? "#C8A94D" : "#141111"} />
                 </div>
 
-                <h2 className="font-grotesk text-2xl xs:text-3xl md:text-5xl font-extrabold text-[#141111] mb-2 xs:mb-3 leading-tight">
+                <h2 className={`font-grotesk text-2xl xs:text-3xl md:text-5xl font-extrabold mb-2 xs:mb-3 leading-tight ${
+                  isNightMode ? 'text-[#ECECEC]' : 'text-[#141111]'
+                }`}>
                   Let's build something cool.
                 </h2>
-                <p className="font-sans text-xs xs:text-sm md:text-base text-[#141111]/80 font-medium mb-4 xs:mb-6 leading-relaxed">
+                <p className={`font-sans text-xs xs:text-sm md:text-base font-medium mb-4 xs:mb-6 leading-relaxed ${
+                  isNightMode ? 'text-[#9A9A9A]' : 'text-[#141111]/80'
+                }`}>
                   If you're into building useful things, experimenting with ideas, or just geeking out over tech, we'll probably get along.
                 </p>
 
@@ -126,14 +160,20 @@ export default function ConnectChecklist() {
                         whileTap={{ scale: 0.98 }}
                         className={`w-full flex items-center gap-2.5 xs:gap-3.5 p-3 xs:p-4 rounded-xl brutal-border text-left font-mono text-xs xs:text-sm font-bold transition-all cursor-pointer select-none ${
                           isChecked
-                            ? 'bg-[#A8E66C] shadow-brutal-sm'
-                            : 'bg-white hover:bg-neutral-50 hover:shadow-brutal-sm'
+                            ? isNightMode
+                              ? 'bg-[#6BD26B] text-[#0F1012] border-[#3A3A3A] shadow-brutal-sm'
+                              : 'bg-[#A8E66C] text-[#141111] shadow-brutal-sm'
+                            : isNightMode
+                            ? 'bg-[#202226] text-[#ECECEC] border-[#3A3A3A] hover:bg-[#3A3A3A]'
+                            : 'bg-white text-[#141111] hover:bg-neutral-50 hover:shadow-brutal-sm'
                         }`}
                       >
                         {/* Checkbox with self-drawing checkmark */}
                         <div
                           className={`w-5 h-5 xs:w-6 xs:h-6 rounded-md brutal-border-sm flex items-center justify-center shrink-0 transition-colors ${
-                            isChecked ? 'bg-[#141111] text-[#A8E66C]' : 'bg-white'
+                            isChecked
+                              ? isNightMode ? 'bg-[#0F1012] text-[#6BD26B] border-[#3A3A3A]' : 'bg-[#141111] text-[#A8E66C]'
+                              : 'bg-white'
                           }`}
                         >
                           {isChecked && (
@@ -146,7 +186,7 @@ export default function ConnectChecklist() {
                             >
                               <motion.path
                                 d="M4 12L9 17L20 6"
-                                stroke="#A8E66C"
+                                stroke={isNightMode ? '#6BD26B' : '#A8E66C'}
                                 strokeWidth="3.5"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
@@ -158,7 +198,7 @@ export default function ConnectChecklist() {
                           )}
                         </div>
 
-                        <span className={isChecked ? 'line-through opacity-85 text-[#141111]' : 'text-[#141111]'}>
+                        <span className={isChecked ? 'line-through opacity-85' : ''}>
                           {item.text}
                         </span>
                       </motion.button>
@@ -168,7 +208,9 @@ export default function ConnectChecklist() {
               </div>
 
               {/* Micro Status Footer */}
-              <div className="mt-4 xs:mt-6 pt-3 xs:pt-4 border-t border-[#141111]/20 flex flex-wrap justify-between items-center font-mono text-[9px] xs:text-[10px] text-[#141111]/60 font-bold uppercase gap-2">
+              <div className={`mt-4 xs:mt-6 pt-3 xs:pt-4 border-t flex flex-wrap justify-between items-center font-mono text-[9px] xs:text-[10px] font-bold uppercase gap-2 ${
+                isNightMode ? 'border-[#3A3A3A] text-[#9A9A9A]' : 'border-[#141111]/20 text-[#141111]/60'
+              }`}>
                 <span>BUILD STATUS: ONLINE</span>
                 <span>LAST COMMIT: RECENTLY</span>
               </div>
@@ -177,46 +219,52 @@ export default function ConnectChecklist() {
             {/* Right Column: Rotating Sticky Note & Builder Sync Counter Card */}
             <div className="lg:col-span-5 flex flex-col justify-between gap-4 xs:gap-6">
               {/* Rotating Engineer Sticky Note */}
-              <div className="bg-[#FFD000] brutal-border p-4 xs:p-5 rounded-2xl shadow-brutal rotate-[-1deg] xs:rotate-[-2deg] relative">
+              <div className={`brutal-border p-4 xs:p-5 rounded-2xl shadow-brutal rotate-[-1deg] xs:rotate-[-2deg] relative ${
+                isNightMode ? 'bg-[#C8A94D] text-[#0F1012] border-[#3A3A3A]' : 'bg-[#FFD000] text-[#141111]'
+              }`}>
                 <span className="pin-marker -top-3 left-1/2 -translate-x-1/2" />
                 
-                <div className="flex items-center justify-between border-b border-[#141111]/30 pb-2 mb-3">
-                  <span className="font-mono text-[11px] xs:text-xs font-bold uppercase tracking-wider text-[#141111]">
+                <div className="flex items-center justify-between border-b border-black/20 pb-2 mb-3">
+                  <span className="font-mono text-[11px] xs:text-xs font-bold uppercase tracking-wider">
                     📌 {activeNote.tag}
                   </span>
-                  <span className="font-mono text-[8px] xs:text-[9px] font-bold text-[#141111]/60">
+                  <span className="font-mono text-[8px] xs:text-[9px] font-bold opacity-70">
                     PINNED NOTE
                   </span>
                 </div>
 
-                <div className="space-y-1 xs:space-y-1.5 font-mono text-xs xs:text-sm font-bold text-[#141111]">
+                <div className="space-y-1 xs:space-y-1.5 font-mono text-xs xs:text-sm font-bold">
                   {activeNote.lines.map((line, idx) => (
                     <p key={idx}>{line}</p>
                   ))}
                 </div>
 
-                <div className="text-right font-mono text-[8px] xs:text-[9px] font-bold text-[#141111]/60 mt-3 pt-2 border-t border-[#141111]/20">
+                <div className="text-right font-mono text-[8px] xs:text-[9px] font-bold opacity-70 mt-3 pt-2 border-t border-black/10">
                   REVIEWED TODAY // ZAGGU
                 </div>
               </div>
 
               {/* Counter & Builder Sync Card */}
-              <div className="bg-white brutal-border p-4 xs:p-6 rounded-2xl shadow-brutal flex flex-col items-center justify-center text-center flex-1 min-h-[220px] xs:min-h-[260px]">
+              <div className={`brutal-border p-4 xs:p-6 rounded-2xl shadow-brutal flex flex-col items-center justify-center text-center flex-1 min-h-[220px] xs:min-h-[260px] ${
+                isNightMode ? 'bg-[#202226] border-[#3A3A3A]' : 'bg-white border-[#141111]'
+              }`}>
                 {/* Counter Number */}
                 <div className="mb-2 xs:mb-3">
-                  <div className="font-grotesk text-4xl xs:text-5xl font-extrabold text-[#141111]">
+                  <div className={`font-grotesk text-4xl xs:text-5xl font-extrabold ${isNightMode ? 'text-[#ECECEC]' : 'text-[#141111]'}`}>
                     <motion.span
                       key={checkedIds.length}
                       initial={{ scale: 0.8, opacity: 0.5 }}
                       animate={{ scale: 1, opacity: 1 }}
                       transition={{ type: 'spring', stiffness: 300 }}
-                      className="text-[#FF6B8B]"
+                      className={isNightMode ? 'text-[#D8B04C]' : 'text-[#FF6B8B]'}
                     >
                       {checkedIds.length}
                     </motion.span>{' '}
                     / {CHECKLIST_ITEMS.length}
                   </div>
-                  <div className="font-mono text-[11px] xs:text-xs font-extrabold uppercase tracking-wider text-[#141111] mt-1">
+                  <div className={`font-mono text-[11px] xs:text-xs font-extrabold uppercase tracking-wider mt-1 ${
+                    isNightMode ? 'text-[#C8A94D]' : 'text-[#141111]'
+                  }`}>
                     BUILDER SYNC
                   </div>
                 </div>
@@ -230,11 +278,13 @@ export default function ConnectChecklist() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -5 }}
                       transition={{ duration: 0.2 }}
-                      className="font-mono text-[11px] xs:text-xs text-[#141111] font-semibold bg-[#FFD000]/30 brutal-border-sm px-2.5 xs:px-3 py-1.5 xs:py-2 rounded-lg"
+                      className={`font-mono text-[11px] xs:text-xs font-semibold brutal-border-sm px-2.5 xs:px-3 py-1.5 xs:py-2 rounded-lg ${
+                        isNightMode ? 'bg-[#0F1012] text-[#ECECEC] border-[#3A3A3A]' : 'bg-[#FFD000]/30 text-[#141111]'
+                      }`}
                     >
                       <p>{currentMsg.text}</p>
                       {currentMsg.subtext && (
-                        <p className="font-bold text-[#FF6B8B] mt-0.5">{currentMsg.subtext}</p>
+                        <p className={`font-bold mt-0.5 ${isNightMode ? 'text-[#D85B5B]' : 'text-[#FF6B8B]'}`}>{currentMsg.subtext}</p>
                       )}
                     </motion.div>
                   </AnimatePresence>
@@ -246,11 +296,13 @@ export default function ConnectChecklist() {
                     <div className="flex flex-col items-center gap-1.5">
                       <button
                         disabled
-                        className="w-full py-2.5 xs:py-3 bg-neutral-200 text-neutral-500 brutal-border-sm rounded-xl font-mono text-xs xs:text-sm font-bold uppercase cursor-not-allowed opacity-60"
+                        className="w-full py-2.5 xs:py-3 bg-neutral-700 text-neutral-400 brutal-border-sm rounded-xl font-mono text-xs xs:text-sm font-bold uppercase cursor-not-allowed opacity-60"
                       >
                         Say Hello
                       </button>
-                      <span className="font-mono text-[9px] xs:text-[10px] text-[#141111]/50 font-bold uppercase">
+                      <span className={`font-mono text-[9px] xs:text-[10px] font-bold uppercase ${
+                        isNightMode ? 'text-[#9A9A9A]' : 'text-[#141111]/50'
+                      }`}>
                         Check all 4 boxes to activate
                       </span>
                     </div>
@@ -262,7 +314,10 @@ export default function ConnectChecklist() {
                     >
                       <a
                         href={SOCIAL_LINKS.email}
-                        className="w-full py-2.5 xs:py-3 bg-[#A8E66C] text-[#141111] brutal-border rounded-xl font-mono text-xs xs:text-sm font-extrabold uppercase shadow-brutal hover:bg-[#FFD000] hover:shadow-brutal-lg transition-all text-center"
+                        onClick={() => playFx('click')}
+                        className={`w-full py-2.5 xs:py-3 brutal-border rounded-xl font-mono text-xs xs:text-sm font-extrabold uppercase shadow-brutal transition-all text-center ${
+                          isNightMode ? 'bg-[#6BD26B] text-[#0F1012] border-[#3A3A3A] hover:bg-[#C8A94D]' : 'bg-[#A8E66C] text-[#141111] hover:bg-[#FFD000]'
+                        }`}
                       >
                         Say Hello ✉
                       </a>
@@ -272,7 +327,10 @@ export default function ConnectChecklist() {
                           href={SOCIAL_LINKS.linkedin}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-2 xs:px-2.5 py-1.5 bg-[#C0A0FF] brutal-border-sm rounded-lg font-mono text-[10px] xs:text-[11px] font-bold hover:bg-[#FFD000] transition-colors text-center"
+                          onClick={() => playFx('click')}
+                          className={`px-2 xs:px-2.5 py-1.5 brutal-border-sm rounded-lg font-mono text-[10px] xs:text-[11px] font-bold transition-colors text-center ${
+                            isNightMode ? 'bg-[#17181B] text-[#C8A94D] border-[#3A3A3A] hover:bg-[#3A3A3A]' : 'bg-[#C0A0FF] hover:bg-[#FFD000]'
+                          }`}
                         >
                           LinkedIn ↗
                         </a>
@@ -280,7 +338,10 @@ export default function ConnectChecklist() {
                           href={SOCIAL_LINKS.github}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-2 xs:px-2.5 py-1.5 bg-[#FFD000] brutal-border-sm rounded-lg font-mono text-[10px] xs:text-[11px] font-bold hover:bg-[#A8E66C] transition-colors text-center"
+                          onClick={() => playFx('click')}
+                          className={`px-2 xs:px-2.5 py-1.5 brutal-border-sm rounded-lg font-mono text-[10px] xs:text-[11px] font-bold transition-colors text-center ${
+                            isNightMode ? 'bg-[#17181B] text-[#27CCF3] border-[#3A3A3A] hover:bg-[#3A3A3A]' : 'bg-[#FFD000] hover:bg-[#A8E66C]'
+                          }`}
                         >
                           GitHub ↗
                         </a>
@@ -288,7 +349,10 @@ export default function ConnectChecklist() {
                           href={SOCIAL_LINKS.x}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-2 xs:px-2.5 py-1.5 bg-[#FF6B8B] text-white brutal-border-sm rounded-lg font-mono text-[10px] xs:text-[11px] font-bold hover:bg-[#141111] transition-colors text-center"
+                          onClick={() => playFx('click')}
+                          className={`px-2 xs:px-2.5 py-1.5 brutal-border-sm rounded-lg font-mono text-[10px] xs:text-[11px] font-bold transition-colors text-center ${
+                            isNightMode ? 'bg-[#D85B5B] text-white border-[#3A3A3A] hover:bg-[#3A3A3A]' : 'bg-[#FF6B8B] text-white hover:bg-[#141111]'
+                          }`}
                         >
                           X ↗
                         </a>
@@ -296,7 +360,10 @@ export default function ConnectChecklist() {
                           href={SOCIAL_LINKS.instagram}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-2 xs:px-2.5 py-1.5 bg-[#27CCF3] brutal-border-sm rounded-lg font-mono text-[10px] xs:text-[11px] font-bold hover:bg-[#A8E66C] transition-colors text-center"
+                          onClick={() => playFx('click')}
+                          className={`px-2 xs:px-2.5 py-1.5 brutal-border-sm rounded-lg font-mono text-[10px] xs:text-[11px] font-bold transition-colors text-center ${
+                            isNightMode ? 'bg-[#6BD26B] text-[#0F1012] border-[#3A3A3A] hover:bg-[#3A3A3A]' : 'bg-[#27CCF3] hover:bg-[#A8E66C]'
+                          }`}
                         >
                           Instagram ↗
                         </a>

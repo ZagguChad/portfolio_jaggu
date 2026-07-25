@@ -2,9 +2,11 @@
 
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { useNightShift } from '@/context/NightShiftContext';
 
 export default function HeroScene() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { isNightMode } = useNightShift();
 
   useEffect(() => {
     const container = containerRef.current;
@@ -26,15 +28,19 @@ export default function HeroScene() {
     container.appendChild(renderer.domElement);
 
     // 2. Ambient & Directional Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
+    const ambientLight = new THREE.AmbientLight(0xffffff, isNightMode ? 1.2 : 1.8);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    const dirLight = new THREE.DirectionalLight(0xffffff, isNightMode ? 0.9 : 1.2);
     dirLight.position.set(5, 8, 5);
     scene.add(dirLight);
 
-    // Palette hex values: Black (#141111), Yellow (#FFD000), Sky Blue (#27CCF3), Green (#A8E66C), Pink (#FF6B8B), Purple (#C0A0FF)
-    const colors = [0x141111, 0xffd000, 0x27ccf3, 0xa8e66c, 0xff6b8b, 0xc0a0ff];
+    // Color Palettes
+    // Day Palette: Black, Yellow, Sky Blue, Green, Pink, Purple
+    // Night Palette: Gold (#C8A94D), Amber (#D8B04C), Dark Steel (#3A3A3A), Cyan (#27CCF3), Green (#6BD26B)
+    const colors = isNightMode
+      ? [0xc8a94d, 0xd8b04c, 0x3a3a3a, 0x27ccf3, 0x6bd26b, 0xc8a94d]
+      : [0x141111, 0xffd000, 0x27ccf3, 0xa8e66c, 0xff6b8b, 0xc0a0ff];
 
     // 3. Create Group of Procedural Low-Poly Builder Objects
     const group = new THREE.Group();
@@ -68,14 +74,14 @@ export default function HeroScene() {
       const geo = geometries[idx % geometries.length];
       const color = colors[idx % colors.length];
       
-      const isWire = idx % 2 === 0;
+      const isWire = isNightMode ? true : idx % 2 === 0;
       const mat = new THREE.MeshStandardMaterial({
         color: color,
         wireframe: isWire,
         wireframeLinewidth: isWire ? 2 : 1,
         flatShading: true,
-        roughness: 0.4,
-        metalness: 0.1,
+        roughness: isNightMode ? 0.2 : 0.4,
+        metalness: isNightMode ? 0.7 : 0.1,
       });
 
       const mesh = new THREE.Mesh(geo, mat);
@@ -89,17 +95,17 @@ export default function HeroScene() {
       meshes.push({
         mesh,
         rotSpeed: {
-          x: (Math.random() - 0.5) * 0.4,
-          y: (Math.random() - 0.5) * 0.5,
-          z: (Math.random() - 0.5) * 0.3,
+          x: (Math.random() - 0.5) * 0.3,
+          y: (Math.random() - 0.5) * 0.4,
+          z: (Math.random() - 0.5) * 0.25,
         },
         basePosY: pos.y,
-        floatSpeed: 1 + Math.random() * 0.8,
+        floatSpeed: 0.8 + Math.random() * 0.6,
         floatOffset: Math.random() * Math.PI * 2,
       });
     });
 
-    // Floating engineering particles (points)
+    // Floating particles
     const particleGeo = new THREE.BufferGeometry();
     const particleCount = 60;
     const posArray = new Float32Array(particleCount * 3);
@@ -110,10 +116,10 @@ export default function HeroScene() {
     }
     particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     const particleMat = new THREE.PointsMaterial({
-      size: 0.09,
-      color: 0x141111,
+      size: isNightMode ? 0.11 : 0.09,
+      color: isNightMode ? 0xc8a94d : 0x141111,
       transparent: true,
-      opacity: 0.45,
+      opacity: isNightMode ? 0.6 : 0.45,
     });
     const particles = new THREE.Points(particleGeo, particleMat);
     group.add(particles);
@@ -139,9 +145,10 @@ export default function HeroScene() {
       const delta = clock.getDelta();
       const elapsedTime = clock.getElapsedTime();
 
-      // Rotate group slightly based on mouse position
-      group.rotation.y += (mouseX * 0.2 - group.rotation.y) * 0.05;
-      group.rotation.x += (-mouseY * 0.2 - group.rotation.x) * 0.05;
+      // Smooth delta-based exponential damping for butter-smooth mouse tracking
+      const damp = 1 - Math.exp(-delta * 4);
+      group.rotation.y += (mouseX * 0.22 - group.rotation.y) * damp;
+      group.rotation.x += (-mouseY * 0.22 - group.rotation.x) * damp;
 
       // Animate individual meshes
       meshes.forEach(({ mesh, rotSpeed, basePosY, floatSpeed, floatOffset }) => {

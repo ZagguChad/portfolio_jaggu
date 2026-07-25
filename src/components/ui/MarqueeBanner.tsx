@@ -17,7 +17,7 @@ export default function MarqueeBanner({
 
   return (
     <div
-      className={`w-full overflow-hidden brutal-border border-x-0 py-3 ${colorClass} text-[#141111] font-mono text-sm md:text-base font-extrabold uppercase tracking-widest select-none`}
+      className={`w-full overflow-hidden brutal-border border-x-0 py-3 ${colorClass} font-mono text-sm md:text-base font-extrabold uppercase tracking-widest select-none ${colorClass.includes('text-') ? '' : 'text-[#141111]'}`}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >

@@ -5,11 +5,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GREETINGS } from '@/data/portfolioData';
 
 export default function Loader() {
+  const [mounted, setMounted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
+    if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    const WORD_DELAY = 320; // ms per greeting word
+
     // 1. Cycling greetings
     const wordInterval = setInterval(() => {
       setCurrentIndex((prev) => {
@@ -20,11 +30,11 @@ export default function Loader() {
           return prev;
         }
       });
-    }, 160);
+    }, WORD_DELAY);
 
     // 2. Progress percentage
     const startTime = Date.now();
-    const totalDuration = GREETINGS.length * 160;
+    const totalDuration = GREETINGS.length * WORD_DELAY;
 
     const progressInterval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -34,6 +44,7 @@ export default function Loader() {
       if (pct >= 100) {
         clearInterval(progressInterval);
         setTimeout(() => {
+          window.scrollTo(0, 0);
           setIsFinished(true);
         }, 250);
       }
@@ -67,10 +78,10 @@ export default function Loader() {
               <span className="w-3 h-3 rounded-full bg-[#141111] animate-ping" />
               <motion.h1
                 key={currentIndex}
-                initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                initial={mounted ? { opacity: 0, y: 15, scale: 0.95 } : false}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.15 }}
+                transition={{ duration: 0.2 }}
                 className="font-grotesk text-3xl xs:text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-center px-2"
               >
                 {GREETINGS[currentIndex]}
